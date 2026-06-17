@@ -1,0 +1,587 @@
+/* ============================================================
+   Arts Store — Responsive CSS
+   Include this AFTER style.css on every page:
+   <link rel="stylesheet" href="css/responsive.css"/>
+   ============================================================ */
+
+/* ============================================================
+   BREAKPOINTS:
+   1200px — Large laptop
+    992px — Tablet landscape
+    768px — Tablet portrait
+    576px — Mobile large
+    400px — Mobile small
+   ============================================================ */
+
+/* ============================================================
+   1. TOP BAR
+   ============================================================ */
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 11px;
+  }
+  .top-bar-links {
+    justify-content: center;
+  }
+  .top-bar-links a {
+    padding: 0 10px;
+    font-size: 11px;
+  }
+}
+
+/* ============================================================
+   2. NAVBAR
+   ============================================================ */
+@media (max-width: 992px) {
+  nav.navbar {
+    padding: 14px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .nav-menu {
+    gap: 20px;
+  }
+  .nav-menu a {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  nav.navbar {
+    padding: 12px 16px;
+    position: relative;
+  }
+  .nav-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(26,26,26,0.97);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    z-index: 9999;
+  }
+  .nav-menu.open {
+    display: flex;
+  }
+  .nav-menu a {
+    font-size: 22px;
+    font-family: 'Playfair Display', serif;
+    color: #fff !important;
+    letter-spacing: .08em;
+  }
+  .nav-menu a:hover { color: #7B5EA7 !important; }
+  .nav-menu a.active { color: #7B5EA7 !important; }
+  .nav-menu a.active::after { display: none; }
+
+  /* Close button inside mobile menu */
+  .nav-close {
+    position: fixed;
+    top: 20px; right: 20px;
+    font-size: 28px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 10000;
+    background: none;
+    border: none;
+    display: none;
+  }
+  .nav-menu.open + .nav-close,
+  .nav-close.show { display: block; }
+
+  /* Hamburger button */
+  .nav-hamburger {
+    display: flex !important;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #1a1a1a;
+    border-radius: 2px;
+    transition: all .3s;
+  }
+
+  .nav-icons {
+    gap: 12px;
+  }
+  .nav-icon {
+    font-size: 17px;
+  }
+  /* Hide Admin/Staff text on mobile — show only icon */
+  .nav-icons a[href*="admin/login"] span,
+  .nav-icons a[href*="employee/login"] span {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-logo { font-size: 22px; }
+  .nav-icons { gap: 8px; }
+}
+
+/* ============================================================
+   3. HERO SLIDER
+   ============================================================ */
+@media (max-width: 992px) {
+  .hero-slider { height: 420px; }
+  .slide-title { font-size: 54px; }
+  .slide-content { padding: 40px 40px; max-width: 60%; }
+}
+
+@media (max-width: 768px) {
+  .hero-slider { height: 360px; }
+  .slide-title { font-size: 40px; }
+  .slide-content { padding: 30px 20px; max-width: 65%; }
+  .slide-sub { font-size: 12px; }
+  .btn-shop { padding: 11px 28px; font-size: 11px; }
+  .slider-arrow { width: 36px; height: 36px; font-size: 15px; }
+}
+
+@media (max-width: 576px) {
+  .hero-slider { height: 300px; }
+  .slide-title { font-size: 32px; }
+  .slide-content { max-width: 75%; padding: 24px 16px; }
+  .slide-img { width: 50%; }
+}
+
+@media (max-width: 400px) {
+  .hero-slider { height: 260px; }
+  .slide-title { font-size: 26px; }
+  .slide-content { max-width: 80%; }
+}
+
+/* ============================================================
+   4. FEATURES STRIP
+   ============================================================ */
+@media (max-width: 992px) {
+  .features-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+  .feat-item:nth-child(2) { border-right: none; }
+  .feat-item:nth-child(3) { border-top: 1px solid #2e2e2e; }
+  .feat-item:nth-child(4) {
+    border-top: 1px solid #2e2e2e;
+    border-right: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .features-strip { grid-template-columns: 1fr; }
+  .feat-item { border-right: none !important; border-top: 1px solid #2e2e2e; }
+  .feat-item:first-child { border-top: none; }
+  .feat-item { padding: 16px 20px; }
+  .feat-icon { width: 36px; height: 36px; font-size: 16px; }
+  .feat-text strong { font-size: 13px; }
+  .feat-text span { font-size: 11px; }
+}
+
+/* ============================================================
+   5. HOT SALE BANNER
+   ============================================================ */
+@media (max-width: 992px) {
+  .hot-sale-banner {
+    padding: 50px 40px;
+    gap: 30px;
+  }
+  .hsb-title { font-size: 42px; }
+  .hsb-title span { font-size: 30px; }
+}
+
+@media (max-width: 768px) {
+  .hot-sale-banner {
+    grid-template-columns: 1fr;
+    padding: 40px 24px;
+  }
+  .hsb-right { display: none; }
+  .hsb-title { font-size: 38px; }
+  .hsb-btns { flex-wrap: wrap; }
+}
+
+@media (max-width: 576px) {
+  .hsb-title { font-size: 30px; }
+  .hsb-title span { font-size: 22px; }
+  .hsb-sub { font-size: 13px; }
+}
+
+/* ============================================================
+   6. FEATURED CATEGORIES GRID (Homepage)
+   ============================================================ */
+@media (max-width: 992px) {
+  .feat-cats { padding: 50px 24px; }
+  .feat-cats-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  .fc-card.fc-large { grid-row: auto; grid-column: 1 / -1; height: 240px; }
+}
+
+@media (max-width: 576px) {
+  .feat-cats-grid { grid-template-columns: 1fr; }
+  .fc-card.fc-large { height: 200px; }
+  .fc-card { height: 160px; }
+  .fc-info h3 { font-size: 18px; }
+  .fc-card.fc-large .fc-info h3 { font-size: 22px; }
+}
+
+/* ============================================================
+   7. PRODUCT GRID
+   ============================================================ */
+@media (max-width: 1200px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+
+@media (max-width: 768px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .products-section { padding: 40px 16px; }
+  .section-header h2 { font-size: 26px; }
+}
+
+@media (max-width: 400px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .product-name { font-size: 12px; }
+  .product-price { font-size: 13px; }
+}
+
+/* ============================================================
+   8. CATEGORIES PAGE
+   ============================================================ */
+@media (max-width: 992px) {
+  .cat-row-img { width: 260px; }
+  .cat-row-body { padding: 24px 28px; }
+  .cat-row-title { font-size: 24px; }
+}
+
+@media (max-width: 768px) {
+  .cat-row-card,
+  .cat-row-card[style*="row-reverse"] {
+    flex-direction: column !important;
+  }
+  .cat-row-img { width: 100%; min-height: 180px; }
+  .cat-row-body {
+    padding: 20px 18px;
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+  .cat-row-meta { justify-content: flex-start !important; }
+  .cat-row-title { font-size: 20px; }
+  .cat-row-desc { font-size: 13px; }
+}
+
+/* ============================================================
+   9. PAGE HERO (About, Contact, Categories etc.)
+   ============================================================ */
+@media (max-width: 768px) {
+  .page-hero { height: 180px; }
+  .page-hero h1 { font-size: 36px; }
+}
+
+@media (max-width: 576px) {
+  .page-hero { height: 140px; }
+  .page-hero h1 { font-size: 28px; }
+}
+
+/* ============================================================
+   10. SECTION HEADERS
+   ============================================================ */
+@media (max-width: 768px) {
+  .section-header h2 { font-size: 24px; }
+  .section-header p { font-size: 13px; }
+}
+
+/* ============================================================
+   11. CART PAGE
+   ============================================================ */
+@media (max-width: 992px) {
+  .cart-section { padding: 40px 20px; }
+  .cart-table th,
+  .cart-table td { padding: 12px 8px; }
+  .cart-item-img { width: 55px; height: 55px; }
+}
+
+@media (max-width: 768px) {
+  /* Stack cart table on mobile */
+  .cart-table thead { display: none; }
+  .cart-table tr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 14px 0;
+  }
+  .cart-table td { border: none; padding: 4px 0; }
+  .cart-summary {
+    max-width: 100%;
+    margin-left: 0;
+  }
+  .cart-item-img { width: 60px; height: 60px; }
+}
+
+/* ============================================================
+   12. CHECKOUT PAGE
+   ============================================================ */
+@media (max-width: 992px) {
+  section > div[style*="grid-template-columns:1fr 380px"] {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .pay-grid.col2 { grid-template-columns: 1fr !important; }
+  .card-type-row { gap: 8px; }
+  .card-type-btn { padding: 7px 10px; font-size: 11px; }
+}
+
+/* ============================================================
+   13. ABOUT PAGE
+   ============================================================ */
+@media (max-width: 992px) {
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  .about-section { padding: 50px 24px; }
+}
+
+@media (max-width: 768px) {
+  /* Stats row on about page */
+  div[style*="grid-template-columns:repeat(4,1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+  }
+  /* Why choose us grid */
+  div[style*="grid-template-columns:repeat(3,1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ============================================================
+   14. CONTACT PAGE
+   ============================================================ */
+@media (max-width: 992px) {
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  .contact-section { padding: 50px 24px; }
+  .contact-box { padding: 30px 24px; }
+}
+
+/* ============================================================
+   15. PRODUCT DETAIL PAGE
+   ============================================================ */
+@media (max-width: 992px) {
+  .detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  .product-detail { padding: 40px 20px; }
+  .detail-info h1 { font-size: 24px; }
+  .detail-price { font-size: 20px; }
+}
+
+/* ============================================================
+   16. MY ACCOUNT PAGE
+   ============================================================ */
+@media (max-width: 992px) {
+  .acc-wrap {
+    grid-template-columns: 1fr !important;
+    padding: 24px 20px !important;
+  }
+  .acc-sidebar { position: static !important; }
+  .acc-stats-row {
+    grid-template-columns: 1fr 1fr !important;
+    padding: 0 20px !important;
+    margin-top: -40px !important;
+  }
+  .acc-body {
+    grid-template-columns: 1fr !important;
+    padding: 0 20px !important;
+  }
+  .acc-hero { padding: 30px 24px 80px !important; }
+  .acc-hero-name { font-size: 20px !important; }
+}
+
+@media (max-width: 576px) {
+  .acc-stats-row {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    padding: 0 12px !important;
+  }
+  .acc-stat { padding: 14px 12px; gap: 10px; }
+  .acc-stat-num { font-size: 18px; }
+  .ord-body { grid-template-columns: 1fr 1fr !important; }
+  .pf-grid { grid-template-columns: 1fr !important; }
+  .acc-panel { padding: 20px 16px; }
+}
+
+@media (max-width: 400px) {
+  .acc-stats-row { grid-template-columns: 1fr 1fr !important; }
+  .ord-card-head { flex-direction: column; align-items: flex-start; }
+  .ord-body { grid-template-columns: 1fr !important; }
+}
+
+/* ============================================================
+   17. FOOTER
+   ============================================================ */
+@media (max-width: 1200px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+}
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+  footer.site-footer { padding: 50px 24px 30px; }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  .newsletter-form { max-width: 320px; }
+}
+
+@media (max-width: 576px) {
+  footer.site-footer { padding: 40px 16px 24px; }
+  .footer-logo { font-size: 22px; }
+}
+
+/* ============================================================
+   18. FORMS (Login, Register — generic)
+   ============================================================ */
+@media (max-width: 768px) {
+  .form-section { padding: 40px 16px; }
+  .form-box { padding: 32px 20px; }
+  div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ============================================================
+   19. HELP/FAQ PAGE
+   ============================================================ */
+@media (max-width: 768px) {
+  section[style*="max-width:900px"] { padding: 50px 20px !important; }
+  .hsb-btns a { width: 100%; text-align: center; justify-content: center; }
+}
+
+/* ============================================================
+   20. TRACK ORDER PAGE
+   ============================================================ */
+@media (max-width: 768px) {
+  .track-steps { padding: 0 10px; }
+  div[style*="grid-template-columns:1fr 1fr"][style*="order"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ============================================================
+   21. ADMIN DASHBOARD
+   ============================================================ */
+@media (max-width: 992px) {
+  .sidebar { width: 220px; }
+  .dash-main { margin-left: 220px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    width: 260px;
+    left: -260px;
+    transition: left .3s ease;
+    z-index: 9999;
+  }
+  .sidebar.open { left: 0; }
+  .dash-main { margin-left: 0; }
+  .dash-topbar { padding: 0 16px; }
+  .dash-content { padding: 16px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-card { padding: 16px; gap: 12px; }
+  .stat-icon { width: 40px; height: 40px; font-size: 18px; }
+  .stat-info h3 { font-size: 22px; }
+
+  /* Menu toggle button for admin mobile */
+  .admin-menu-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    background: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #444;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .dash-table th,
+  .dash-table td { padding: 10px 8px; font-size: 12px; }
+  .form-row { grid-template-columns: 1fr !important; }
+  .panel-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+
+/* ============================================================
+   22. SCROLL TO TOP BUTTON
+   ============================================================ */
+@media (max-width: 576px) {
+  .scroll-top { bottom: 16px; right: 16px; width: 38px; height: 38px; font-size: 15px; }
+}
+
+/* ============================================================
+   23. LOAD MORE BUTTON
+   ============================================================ */
+@media (max-width: 576px) {
+  .load-more-wrap { margin-top: 30px; }
+  .btn-load { padding: 12px 40px; font-size: 11px; }
+}
+
+/* ============================================================
+   24. GENERAL HELPERS
+   ============================================================ */
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+}
+
+/* Hide on desktop */
+@media (min-width: 769px) {
+  .hide-desktop { display: none !important; }
+  .admin-menu-toggle { display: none !important; }
+  .nav-hamburger { display: none !important; }
+  .nav-close { display: none !important; }
+}
+
+/* Full width on mobile */
+@media (max-width: 576px) {
+  .full-mobile { width: 100% !important; }
+}
+
+/* Padding fix on small screens */
+@media (max-width: 768px) {
+  section { padding-left: 16px !important; padding-right: 16px !important; }
+  .categories { padding: 40px 16px !important; }
+  .feat-cats  { padding: 40px 16px !important; }
+}
+
+@media (max-width: 576px) {
+  .about-section,
+  .contact-section,
+  .product-detail { padding: 30px 16px !important; }
+}

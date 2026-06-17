@@ -1,0 +1,968 @@
+/* ============================================================
+   Arts Store — animations.css
+   Include AFTER style.css and responsive.css:
+   <link rel="stylesheet" href="css/animations.css"/>
+   ============================================================ */
+
+/* ============================================================
+   1. KEYFRAME DEFINITIONS
+   ============================================================ */
+
+/* Fade In */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Fade Up */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade Down */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade Left */
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Fade Right */
+@keyframes fadeRight {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Scale In */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Scale Up (pop) */
+@keyframes scaleUp {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Slide In from Top */
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* Float up and down */
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-10px); }
+}
+
+/* Shimmer / Skeleton loading */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Pulse glow */
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(123,94,167,0.4); }
+  50%     { box-shadow: 0 0 0 12px rgba(123,94,167,0); }
+}
+
+/* Spin */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Shake */
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-8px); }
+  40%     { transform: translateX(8px); }
+  60%     { transform: translateX(-5px); }
+  80%     { transform: translateX(5px); }
+}
+
+/* Bounce */
+@keyframes bounce {
+  0%,100% { transform: translateY(0);    animation-timing-function: cubic-bezier(0.8,0,1,1); }
+  50%     { transform: translateY(-14px); animation-timing-function: cubic-bezier(0,0,0.2,1); }
+}
+
+/* Counter number roll */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Underline grow */
+@keyframes underlineGrow {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* Blob drift */
+@keyframes blobDrift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%     { transform: translate(20px,-20px) scale(1.04); }
+  66%     { transform: translate(-15px,15px) scale(0.97); }
+}
+
+/* Typing cursor blink */
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0; }
+}
+
+/* Progress bar fill */
+@keyframes progressFill {
+  from { width: 0%; }
+  to   { width: var(--progress-width, 100%); }
+}
+
+/* Flip card */
+@keyframes flipIn {
+  from { transform: perspective(400px) rotateY(-90deg); opacity: 0; }
+  to   { transform: perspective(400px) rotateY(0deg);  opacity: 1; }
+}
+
+/* Ribbon wave */
+@keyframes wave {
+  0%,100% { transform: scaleX(1); }
+  50%     { transform: scaleX(1.03); }
+}
+
+/* ============================================================
+   2. SCROLL REVEAL — Intersection Observer Classes
+   ============================================================ */
+
+/* Elements start hidden — JS adds .revealed class */
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger delays for grid children */
+.reveal-stagger > *:nth-child(1) { transition-delay: 0.05s; }
+.reveal-stagger > *:nth-child(2) { transition-delay: 0.12s; }
+.reveal-stagger > *:nth-child(3) { transition-delay: 0.19s; }
+.reveal-stagger > *:nth-child(4) { transition-delay: 0.26s; }
+.reveal-stagger > *:nth-child(5) { transition-delay: 0.33s; }
+.reveal-stagger > *:nth-child(6) { transition-delay: 0.40s; }
+.reveal-stagger > *:nth-child(7) { transition-delay: 0.47s; }
+.reveal-stagger > *:nth-child(8) { transition-delay: 0.54s; }
+
+/* ============================================================
+   3. NAVBAR ANIMATIONS
+   ============================================================ */
+
+/* Navbar slide down on page load */
+nav.navbar {
+  animation: slideDown 0.5s ease both;
+}
+
+/* Nav links hover underline */
+.nav-menu a {
+  position: relative;
+}
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #7B5EA7;
+  transition: width 0.3s ease;
+}
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+  width: 100%;
+}
+
+/* Nav icons hover */
+.nav-icon {
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+.nav-icon:hover {
+  transform: translateY(-3px);
+  color: #7B5EA7;
+}
+
+/* Badge bounce on cart update */
+.badge.updated {
+  animation: scaleUp 0.4s ease;
+}
+
+/* Hamburger lines animate to X */
+.nav-hamburger span {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.nav-hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile menu overlay */
+.nav-menu {
+  transition: opacity 0.3s ease;
+}
+.nav-menu.open {
+  animation: fadeIn 0.3s ease both;
+}
+
+/* ============================================================
+   4. HERO SLIDER ANIMATIONS
+   ============================================================ */
+
+/* Slide content entrance */
+.slide.active .slide-title {
+  animation: fadeRight 0.8s ease 0.2s both;
+}
+.slide.active .slide-sub {
+  animation: fadeRight 0.7s ease 0.1s both;
+}
+.slide.active .btn-shop {
+  animation: fadeUp 0.7s ease 0.4s both;
+}
+.slide.active .slide-img {
+  animation: fadeLeft 0.9s ease 0.1s both;
+}
+
+/* Slider arrows hover */
+.slider-arrow {
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.slider-arrow:hover {
+  transform: translateY(-50%) scale(1.12);
+}
+
+/* ============================================================
+   5. PRODUCT CARDS
+   ============================================================ */
+
+/* Card lift on hover */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+}
+
+/* Product image zoom */
+.product-thumb img {
+  transition: transform 0.5s ease;
+}
+.product-card:hover .product-thumb img {
+  transform: scale(1.07);
+}
+
+/* Product actions slide up */
+.product-actions {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(10px);
+}
+.product-card:hover .product-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Heart button */
+.product-heart {
+  transition: transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275), color 0.2s ease;
+}
+.product-heart:hover {
+  transform: scale(1.25);
+}
+.product-heart.active {
+  animation: scaleUp 0.35s ease;
+  color: #e74c3c;
+}
+
+/* Product badge pulse */
+.product-badge {
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* Action buttons */
+.prod-action-btn {
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.prod-action-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ============================================================
+   6. BUTTONS
+   ============================================================ */
+
+/* Main shop button */
+.btn-shop {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-shop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+.btn-shop:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(123,94,167,0.35);
+}
+.btn-shop:hover::after {
+  transform: scaleX(1);
+}
+.btn-shop:active {
+  transform: translateY(-1px);
+}
+
+/* Outline button */
+.btn-outline {
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+.btn-outline:hover {
+  transform: translateY(-2px);
+}
+
+/* Submit / primary button ripple */
+.btn-submit {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(123,94,167,0.3);
+}
+.btn-submit:active { transform: scale(0.98); }
+
+/* Ripple effect on click */
+.btn-submit .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transform: scale(0);
+  animation: rippleAnim 0.6s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ============================================================
+   7. CATEGORY CARDS
+   ============================================================ */
+
+/* Featured category grid hover */
+.fc-card {
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+}
+.fc-card img {
+  transition: transform 0.55s ease;
+}
+.fc-card:hover img {
+  transform: scale(1.07);
+}
+.fc-info span {
+  transition: color 0.25s ease, letter-spacing 0.25s ease;
+}
+.fc-card:hover .fc-info span {
+  color: #F5C842;
+  letter-spacing: 0.15em;
+}
+
+/* Category row cards */
+.cat-row-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.cat-row-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+}
+.cat-row-img img {
+  transition: transform 0.55s ease;
+}
+.cat-row-card:hover .cat-row-img img {
+  transform: scale(1.06);
+}
+.cat-row-arrow {
+  transition: background 0.25s ease, letter-spacing 0.25s ease;
+}
+.cat-row-card:hover .cat-row-arrow {
+  letter-spacing: 0.18em;
+}
+
+/* ============================================================
+   8. HOT SALE BANNER
+   ============================================================ */
+
+/* Animated tag pulse */
+.hsb-tag {
+  animation: wave 3s ease-in-out infinite;
+}
+
+/* Floating product cards */
+.hsb-card {
+  transition: transform 0.3s ease;
+}
+.hsb-card:nth-child(2) {
+  animation: float 4s ease-in-out infinite;
+}
+.hsb-card:nth-child(1) {
+  animation: float 4.5s ease-in-out infinite 0.5s;
+}
+.hsb-card:nth-child(3) {
+  animation: float 3.8s ease-in-out infinite 1s;
+}
+.hsb-card:hover {
+  transform: translateY(-8px) !important;
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   9. FEATURES STRIP
+   ============================================================ */
+
+.feat-item {
+  transition: background 0.25s ease;
+}
+.feat-item:hover .feat-icon {
+  animation: bounce 0.6s ease;
+}
+.feat-icon {
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.feat-item:hover .feat-icon {
+  background: rgba(123,94,167,0.35);
+  transform: scale(1.1);
+}
+
+/* ============================================================
+   10. FORMS & INPUTS
+   ============================================================ */
+
+/* Input focus animation */
+.form-control,
+.fg input,
+.fg select,
+.fg textarea,
+.pf-field input,
+.pf-field select {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+.form-control:focus,
+.fg input:focus,
+.fg select:focus,
+.pf-field input:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(123,94,167,0.15);
+}
+
+/* Form box entrance */
+.form-box {
+  animation: fadeUp 0.6s ease both;
+}
+
+/* Alert shake on error */
+.alert-error {
+  animation: shake 0.5s ease;
+}
+
+/* Success alert */
+.alert-success {
+  animation: fadeDown 0.4s ease both;
+}
+
+/* ============================================================
+   11. CART
+   ============================================================ */
+
+/* Cart item add animation */
+.cart-item-added {
+  animation: fadeRight 0.4s ease both;
+}
+
+/* Cart item remove animation */
+.cart-item-remove {
+  animation: fadeLeft 0.3s ease both;
+  opacity: 0;
+}
+
+/* Cart summary sticky */
+.cart-summary {
+  transition: box-shadow 0.3s ease;
+}
+
+/* Qty input hover */
+.qty-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.qty-input:focus {
+  box-shadow: 0 0 0 3px rgba(123,94,167,0.15);
+}
+
+/* ============================================================
+   12. TOAST NOTIFICATION
+   ============================================================ */
+
+.toast {
+  animation: fadeRight 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+.toast.hiding {
+  animation: fadeLeft 0.3s ease forwards;
+}
+
+/* ============================================================
+   13. PAGE HERO
+   ============================================================ */
+
+.page-hero h1 {
+  animation: fadeUp 0.7s ease 0.1s both;
+}
+.page-hero p {
+  animation: fadeUp 0.7s ease 0.25s both;
+}
+.page-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #7B5EA7, transparent);
+  animation: shimmer 3s linear infinite;
+  background-size: 200% auto;
+}
+
+/* ============================================================
+   14. ADMIN DASHBOARD
+   ============================================================ */
+
+/* Stat cards */
+.stat-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeUp 0.5s ease both;
+}
+.stat-card:nth-child(1) { animation-delay: 0.05s; }
+.stat-card:nth-child(2) { animation-delay: 0.10s; }
+.stat-card:nth-child(3) { animation-delay: 0.15s; }
+.stat-card:nth-child(4) { animation-delay: 0.20s; }
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(123,94,167,0.14);
+}
+
+/* Stat icon hover */
+.stat-icon {
+  transition: transform 0.3s ease;
+}
+.stat-card:hover .stat-icon {
+  transform: scale(1.12) rotate(-5deg);
+}
+
+/* Stat number count up */
+.stat-info h3 {
+  animation: countUp 0.6s ease both;
+}
+
+/* Panel entrance */
+.panel {
+  animation: fadeUp 0.5s ease both;
+}
+
+/* Sidebar links */
+.sidebar a {
+  transition: background 0.2s ease, border-left-color 0.2s ease, padding-left 0.2s ease;
+}
+.sidebar a:hover {
+  padding-left: 28px;
+}
+
+/* Table rows */
+.dash-table tbody tr {
+  transition: background 0.2s ease;
+}
+.dash-table tbody tr:hover {
+  background: rgba(123,94,167,0.05);
+}
+
+/* Status badges */
+.badge-status {
+  transition: transform 0.2s ease;
+}
+.badge-status:hover {
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   15. MY ACCOUNT PAGE
+   ============================================================ */
+
+/* Hero section */
+.acc-hero-avatar {
+  animation: scaleIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) 0.2s both;
+}
+.acc-hero-name  { animation: fadeRight 0.6s ease 0.3s both; }
+.acc-hero-email { animation: fadeRight 0.6s ease 0.4s both; }
+
+/* Stat cards */
+.acc-stat {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.acc-stat:nth-child(1) { animation: fadeUp 0.5s ease 0.1s both; }
+.acc-stat:nth-child(2) { animation: fadeUp 0.5s ease 0.18s both; }
+.acc-stat:nth-child(3) { animation: fadeUp 0.5s ease 0.26s both; }
+.acc-stat:nth-child(4) { animation: fadeUp 0.5s ease 0.34s both; }
+.acc-stat:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(123,94,167,0.14);
+}
+
+/* Sidebar nav hover */
+.acc-nav a {
+  transition: background 0.2s ease, border-left-color 0.2s ease, padding-left 0.2s ease, color 0.2s ease;
+}
+.acc-nav a:hover {
+  padding-left: 28px;
+}
+
+/* Order cards */
+.ord-card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  animation: fadeUp 0.45s ease both;
+}
+.ord-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(123,94,167,0.10);
+}
+
+/* Modal */
+.modal-box {
+  animation: scaleIn 0.25s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+
+/* ============================================================
+   16. SCROLL TO TOP BUTTON
+   ============================================================ */
+
+.scroll-top {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+.scroll-top:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(123,94,167,0.35);
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   17. FOOTER
+   ============================================================ */
+
+.site-footer a {
+  transition: color 0.25s ease, padding-left 0.2s ease;
+}
+.site-footer a:hover {
+  padding-left: 6px;
+  color: #7B5EA7;
+}
+
+/* Newsletter input */
+.newsletter-form input {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.newsletter-form input:focus {
+  box-shadow: 0 0 0 3px rgba(123,94,167,0.15);
+}
+
+/* ============================================================
+   18. SKELETON LOADING
+   ============================================================ */
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% auto;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: 4px;
+}
+.skeleton-text  { height: 14px; margin-bottom: 8px; border-radius: 3px; }
+.skeleton-title { height: 24px; margin-bottom: 12px; width: 60%; }
+.skeleton-img   { height: 200px; border-radius: 6px; }
+.skeleton-card  { padding: 16px; border-radius: 8px; }
+
+/* ============================================================
+   19. SECTION HEADERS
+   ============================================================ */
+
+.section-header h2 {
+  animation: fadeUp 0.6s ease both;
+}
+.section-line {
+  animation: underlineGrow 0.8s ease 0.3s both;
+  transform-origin: left;
+}
+.section-header p {
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+
+/* ============================================================
+   20. PRODUCT DETAIL PAGE
+   ============================================================ */
+
+.detail-img {
+  animation: fadeRight 0.7s ease both;
+  transition: transform 0.4s ease;
+}
+.detail-img:hover { transform: scale(1.02); }
+
+.detail-info {
+  animation: fadeLeft 0.7s ease 0.1s both;
+}
+.detail-info h1 { animation: fadeUp 0.6s ease 0.2s both; }
+
+/* Add to cart button pulse on hover */
+.btn-add-cart {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.btn-add-cart:hover {
+  transform: translateY(-3px);
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   21. LOGIN PAGES
+   ============================================================ */
+
+.login-card,
+.login-box,
+.register-box {
+  animation: scaleIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+
+/* Left panel blobs */
+.blob,
+.blob-acc {
+  animation: blobDrift 8s ease-in-out infinite;
+}
+.blob-2,
+.blob-acc-2 {
+  animation-delay: -3s;
+  animation-direction: reverse;
+}
+.blob-3 {
+  animation-delay: -5s;
+}
+
+/* Input field focus lift */
+.input-wrap input:focus,
+.input-wrap select:focus {
+  transform: translateY(-1px);
+}
+
+/* Eye button */
+.eye-btn {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.eye-btn:hover {
+  transform: scale(1.15);
+}
+
+/* ============================================================
+   22. CHECKOUT PAGE
+   ============================================================ */
+
+/* Payment panel reveal */
+.payment-panel.active {
+  animation: fadeDown 0.3s ease both;
+}
+
+/* Payment method radio hover */
+label[style*="flex-start"] {
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Card type buttons */
+.card-type-btn {
+  transition: all 0.2s ease;
+}
+.card-type-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+.card-type-btn.selected {
+  animation: scaleIn 0.2s ease both;
+}
+
+/* ============================================================
+   23. TRACK ORDER PAGE
+   ============================================================ */
+
+/* Progress bar animation */
+.track-progress-bar {
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Status steps */
+.track-step {
+  transition: transform 0.3s ease;
+}
+.track-step.done {
+  animation: scaleIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+
+/* ============================================================
+   24. WISHLIST PAGE
+   ============================================================ */
+
+.wishlist-item {
+  animation: fadeUp 0.45s ease both;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+.wishlist-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.10);
+}
+.wishlist-item.removing {
+  animation: fadeLeft 0.3s ease forwards;
+}
+
+/* ============================================================
+   25. FLOATING ELEMENTS
+   ============================================================ */
+
+/* Scroll to top */
+.scroll-top.visible {
+  animation: fadeUp 0.4s ease both;
+}
+
+/* Loading spinner */
+.spinner {
+  width: 32px; height: 32px;
+  border: 3px solid rgba(123,94,167,0.2);
+  border-top-color: #7B5EA7;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ============================================================
+   26. HOVER UTILITY CLASSES
+   ============================================================ */
+
+/* Lift on hover */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+/* Glow on hover */
+.hover-glow:hover {
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+/* Scale on hover */
+.hover-scale {
+  transition: transform 0.25s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.04);
+}
+
+/* Rotate on hover */
+.hover-rotate {
+  transition: transform 0.3s ease;
+}
+.hover-rotate:hover {
+  transform: rotate(8deg) scale(1.05);
+}
+
+/* Float animation */
+.anim-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Shimmer loading */
+.anim-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(90deg, #f5f0ff 25%, #ebe0ff 50%, #f5f0ff 75%);
+  background-size: 200% auto;
+}
+
+/* ============================================================
+   27. PAGE TRANSITION
+   ============================================================ */
+
+/* Smooth page entrance */
+body {
+  animation: fadeIn 0.4s ease both;
+}
+
+/* ============================================================
+   28. REDUCE MOTION — Accessibility
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:   0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration:  0.01ms !important;
+  }
+}
