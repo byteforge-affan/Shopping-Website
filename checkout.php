@@ -9,31 +9,39 @@ if(!isset($_SESSION['customer_id'])) { header('Location: login.php'); exit; }
 $error = $success = '';
 $order_number = '';
 
-// Load cart
+// Per-session checkout nonce; UNIQUE in orders prevents duplicate commits.
+if (empty($_SESSION['checkout_token'])) $_SESSION['checkout_token'] = bin2hex(random_bytes(32));
 $cart_items = [];
-$subtotal   = 0;
-if(!empty($_SESSION['cart'])) {
-    $ids = implode(',', array_map('intval', array_keys($_SESSION['cart'])));
-    $res = $conn->query("SELECT * FROM products WHERE product_id IN ($ids)");
-    if($res) {
-        while($row = $res->fetch_assoc()) {
-            $row['qty']        = $_SESSION['cart'][$row['product_id']];
-            $row['line_total'] = $row['price'] * $row['qty'];
-            $subtotal         += $row['line_total'];
-            $cart_items[]      = $row;
+$subtotal = 0;
+$cartValid = is_array($_SESSION['cart'] ?? null) && count($_SESSION['cart']) > 0;
+if ($cartValid) {
+    foreach ($_SESSION['cart'] as $id => $qty) {
+        if (!ctype_digit((string)$id) || (int)$id < 1 ||
+            !ctype_digit((string)$qty) || (int)$qty < 1 || (int)$qty > 10000) {
+            $cartValid = false; break;
         }
     }
 }
-$shipping = ($subtotal >= 5000) ? 0 : 200;
-$total    = $subtotal + $shipping;
+if ($cartValid) {
+    $ids = implode(',', array_map('intval', array_keys($_SESSION['cart'])));
+    $res = $conn->query("SELECT * FROM products WHERE product_id IN ($ids)");
+    if ($res) while ($row = $res->fetch_assoc()) {
+        $row['qty'] = (int)$_SESSION['cart'][$row['product_id']];
+        $row['line_total'] = (float)$row['price'] * $row['qty'];
+        $subtotal += $row['line_total'];
+        $cart_items[] = $row;
+    }
+    if (count($cart_items) !== count($_SESSION['cart'])) $cartValid = false;
+}
+$shipping = $subtotal >= 5000 ? 0 : 200;
+$total = $subtotal + $shipping;
+if (!$cartValid) $error = 'Your cart contains invalid or unavailable products. Please update it.';
 
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $delivery_type = (int)($_POST['delivery_type'] ?? 3);
-    $address       = clean($conn, $_POST['address'] ?? '');
-    $city          = clean($conn, $_POST['city']    ?? '');
-    $notes         = clean($conn, $_POST['notes']   ?? '');
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $delivery_type = (int)($_POST['delivery_type'] ?? 0);
+    $address = clean($conn, $_POST['address'] ?? '');
+    $city = clean($conn, $_POST['city'] ?? '');
+    $notes = clean($conn, $_POST['notes'] ?? '');
     // ── Payment details by type ────────────────────────────────────────────
     $payment_details = null;
 
@@ -76,65 +84,73 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
         }
 
-    } else {
+    } elseif($delivery_type === 3) {
         $payment_details = json_encode(['method' => 'cod']);
+    } else {
+        $error = 'Invalid payment method.';
     }
 
-    if(!$address || !$city) {
+    if(!$address || !$city || strlen($address)>2000 || strlen($city)>100) {
         $error = 'Please enter your delivery address.';
     }
 
-    if(!$error) {
 
-        // ── Order number: delivery_type(1) + product_code_digits(7) + random(8) = 16 digits
-        // product_code GA00001 → digits only → 0000001 (7 digits)
-        // Example: 3 + 0000001 + 45784139 = 3000000145784139
-        $raw_code  = $cart_items[0]['product_code'] ?? '';
-        $pid7      = str_pad(preg_replace('/[^0-9]/', '', $raw_code), 7, '0', STR_PAD_LEFT);
-        $rand8     = sprintf('%08d', rand(10000000, 99999999));
-        $order_num = $delivery_type . $pid7 . $rand8;
-
-        // ── Insert order ───────────────────────────────────────────────────
-        $stmt = $conn->prepare("
-            INSERT INTO orders
-            (order_number, customer_id, delivery_type, payment_details,
-             address, city, notes, subtotal, shipping, total, status, created_at)
-            VALUES (?,?,?,?,?,?,?,?,?,?,'pending',NOW())
-        ");
-        $stmt->bind_param(
-            "siissssddd",
-            $order_num,
-            $_SESSION['customer_id'],
-            $delivery_type,
-            $payment_details,
-            $address,
-            $city,
-            $notes,
-            $subtotal,
-            $shipping,
-            $total
-        );
-
-        if($stmt->execute()) {
-
-            $oid = $conn->insert_id;
-
-            foreach($cart_items as $it) {
-                $pid = (int)$it['product_id'];
-                $qty = (int)$it['qty'];
-                $pr  = (float)$it['price'];
-                $conn->query("INSERT INTO order_items (order_id,product_id,qty,price)
-                              VALUES ($oid,$pid,$qty,$pr)");
-                $conn->query("UPDATE products SET stock = stock - $qty
-                              WHERE product_id = $pid AND stock >= $qty");
+    if (!hash_equals($_SESSION['checkout_token'], (string)($_POST['checkout_token'] ?? ''))) {
+        $error = 'Checkout form expired. Please reload this page.';
+    }
+    if (!$cartValid) $error = 'Your cart contains invalid or unavailable products.';
+    if (!$error) {
+        try {
+            $conn->begin_transaction();
+            $ids = array_map('intval', array_keys($_SESSION['cart']));
+            sort($ids, SORT_NUMERIC);
+            $locked = [];
+            $sum = 0.0;
+            $lock = $conn->prepare("SELECT product_code,price,stock,is_active FROM products WHERE product_id=? FOR UPDATE");
+            foreach ($ids as $pid) {
+                $qty = (int)$_SESSION['cart'][$pid];
+                $lock->bind_param('i', $pid);
+                if (!$lock->execute()) throw new RuntimeException('Lock failed');
+                $p = $lock->get_result()->fetch_assoc();
+                if (!$p || (int)$p['is_active'] !== 1 || (int)$p['stock'] < $qty ||
+                    (float)$p['price'] < 0) throw new RuntimeException('Unavailable stock');
+                $locked[$pid] = ['qty'=>$qty,'price'=>(float)$p['price'],'code'=>$p['product_code']];
+                $sum += $qty * (float)$p['price'];
             }
-
+            $ship = $sum >= 5000 ? 0.0 : 200.0;
+            $grand = $sum + $ship;
+            $pid7 = substr(str_pad(preg_replace('/[^0-9]/','',$locked[$ids[0]]['code']),7,'0',STR_PAD_LEFT),-7);
+            $order_num = $delivery_type.$pid7.sprintf('%08d',random_int(10000000,99999999));
+            $cid = (int)$_SESSION['customer_id'];
+            $token = $_SESSION['checkout_token'];
+            $ins = $conn->prepare("INSERT INTO orders
+                (order_number,customer_id,delivery_type,payment_details,address,city,notes,
+                 subtotal,shipping,total,checkout_token,status,created_at)
+                 VALUES (?,?,?,?,?,?,?,?,?,?,?,'pending',NOW())");
+            $ins->bind_param('siissssddds',$order_num,$cid,$delivery_type,$payment_details,
+                $address,$city,$notes,$sum,$ship,$grand,$token);
+            if (!$ins->execute()) throw new RuntimeException('Order insert failed');
+            $oid = $conn->insert_id;
+            $item = $conn->prepare("INSERT INTO order_items (order_id,product_id,qty,price) VALUES (?,?,?,?)");
+            $stock = $conn->prepare("UPDATE products SET stock=stock-? WHERE product_id=? AND stock>=? AND is_active=1");
+            foreach ($ids as $pid) {
+                $qty = $locked[$pid]['qty'];
+                $price = $locked[$pid]['price'];
+                $item->bind_param('iiid',$oid,$pid,$qty,$price);
+                if (!$item->execute()) throw new RuntimeException('Item insert failed');
+                $stock->bind_param('iii',$qty,$pid,$qty);
+                if (!$stock->execute() || $stock->affected_rows !== 1)
+                    throw new RuntimeException('Stock update failed');
+            }
+            if (!$conn->commit()) throw new RuntimeException('Commit failed');
             $_SESSION['cart'] = [];
-            $order_number     = $order_num;
-            $success          = "Order placed successfully!";
-
-        } else {
-            $error = 'Could not place order. Please try again.';
+            unset($_SESSION['checkout_token']);
+            $order_number = $order_num;
+            $success = 'Order placed successfully!';
+        } catch (Throwable $e) {
+            try { $conn->rollback(); } catch (Throwable $ignored) {}
+            error_log('Checkout failure: '.$e->getMessage());
+            $error = 'Could not place order. Please review your cart and try again.';
         }
     }
 }
@@ -197,6 +213,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <form method="POST" id="checkoutForm">
+      <input type="hidden" name="checkout_token" value="<?php echo htmlspecialchars($_SESSION['checkout_token'] ?? '', ENT_QUOTES); ?>"/>
 
       <div class="form-group" style="margin-bottom:16px;">
         <label>Delivery Address *</label>
