@@ -72,6 +72,7 @@ CREATE TABLE customers (
 CREATE TABLE orders (
   order_id        INT(11)       NOT NULL AUTO_INCREMENT PRIMARY KEY,
   order_number    VARCHAR(20)   NOT NULL UNIQUE,
+  checkout_token  CHAR(64)       DEFAULT NULL UNIQUE COMMENT 'Idempotency key for checkout submissions',
   customer_id     INT(11)       NOT NULL,
   delivery_type   TINYINT(4)    NOT NULL COMMENT '1=Card 2=Cheque 3=COD',
   payment_details JSON          DEFAULT NULL COMMENT 'Structured payment info per delivery_type',
