@@ -99,9 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Checkout form expired. Please reload this page.';
     }
     if (!$cartValid) $error = 'Your cart contains invalid or unavailable products.';
+    if (!isset($_SESSION['customer_id']) || (int)$_SESSION['customer_id'] < 1) $error = 'Please sign in to checkout.';
     if (!$error) {
         try {
-            $conn->begin_transaction();
+            if (!$conn->begin_transaction()) throw new RuntimeException('Transaction start failed');
             $ids = array_map('intval', array_keys($_SESSION['cart']));
             sort($ids, SORT_NUMERIC);
             $locked = [];
