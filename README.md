@@ -1,6 +1,6 @@
 # Arts Store — E-commerce Management System
 
-> A PHP/MySQL shopping platform with separate customer, employee and administrator workflows.
+> A four-member Aptech academic team project: a PHP/MySQL shopping platform with customer, employee and administrator workflows.
 
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat-square&logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
@@ -10,7 +10,7 @@
 
 **Arts Store** is a database-driven shopping website that combines a customer storefront with dedicated employee and administrator dashboards.
 
-The project covers the shopping flow from product browsing and cart management through checkout and order tracking, while also providing operational tools for products, stock, customers, employees, orders, feedback and reports.
+The project includes code for product browsing, cart management, checkout, order tracking, and operational tools for products, stock, customers, employees, orders, feedback and reports. These workflows have not all been independently runtime-tested.
 
 ## Three-Sided Workflow
 
@@ -25,7 +25,7 @@ The project covers the shopping flow from product browsing and cart management t
 - Browse products without signing in
 - Register and log in
 - Add products to cart
-- Checkout using Credit Card, Cheque or Cash on Delivery
+- Checkout interface with Credit Card, Cheque or Cash on Delivery options (not verified as production payment processing)
 - Receive a unique 16-digit order number
 - View orders through My Account
 - Track orders
@@ -57,6 +57,12 @@ Employees have a more focused operational dashboard:
 - Order-status management
 - Dispatch and delivery confirmation
 - Personal password management
+
+## Checkout and Inventory Limitations (main branch)
+
+The `main` branch contains checkout code for creating orders and updating product stock. **Atomic completion of order creation and stock changes, concurrent inventory reliability, and end-to-end payment processing have not been verified.** Do not treat these flows as production-ready without additional testing and remediation.
+
+[Pull request #1](https://github.com/byteforge-affan/arts-store/pull/1) for atomic checkout and inventory integrity was **closed without merge**. Its preserved `phase-3a1-atomic-checkout-inventory` branch contains unfinished, runtime-unverified remediation work; those changes are **not claimed as implemented on `main`**.
 
 ## Project Structure
 
@@ -118,7 +124,11 @@ ArtsStore/
 - URL: `http://localhost/ArtsStore/login.php`
 - Demo accounts: `ahmed@gmail.com`, `saad@gmail.com`, `sara@gmail.com`
 
-> These credentials are included for local demonstration/testing of the portfolio project.
+> **Local demonstration only:** These seeded credentials are publicly documented and must not be used for a public or production deployment. Change or disable demo accounts before any public hosting.
+
+## Academic Team and Contributions
+
+Arts Store was developed as a **four-member Aptech academic team project**. **Muhammad Affan contributed frontend development and PHP backend implementation**. This README does not attribute the entire project or database design to one contributor.
 
 ## Project Focus
 
@@ -126,6 +136,6 @@ Arts Store demonstrates how a storefront and internal business workflows can sha
 
 ---
 
-**Built by Muhammad Affan · ByteForge Studio**
+**Academic team project · Muhammad Affan (frontend and PHP backend contributions)**
 
 [GitHub Profile](https://github.com/byteforge-affan) · [Portfolio](https://byteforge-affan-portfolio.netlify.app/)
